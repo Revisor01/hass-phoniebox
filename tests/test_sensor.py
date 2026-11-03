@@ -2,7 +2,12 @@
 
 from typing import TYPE_CHECKING
 
-from homeassistant.const import EntityCategory, UnitOfInformation, UnitOfTemperature
+from homeassistant.const import (
+    EntityCategory,
+    UnitOfInformation,
+    UnitOfTemperature,
+    UnitOfTime,
+)
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers import entity_registry as er
 from pytest_homeassistant_custom_component.common import (
@@ -178,3 +183,23 @@ async def test_file_source_sensor(
     sensor_state = hass.states.get("sensor.phoniebox_test_box_source")
     assert sensor_state is not None
     assert sensor_state.state == "file"
+
+
+async def test_sleep_timer_sensor(
+    hass: HomeAssistant, mock_phoniebox: MockConfigEntry, config: dict
+) -> None:
+    """The remaining minutes of the sleep timer show as a duration sensor."""
+    async_fire_mqtt_message(hass, "test_phoniebox/attribute/remaining_stopafter", "18")
+    await hass.async_block_till_done()
+
+    sensor_state = hass.states.get("sensor.phoniebox_test_box_remaining_stopafter")
+    assert sensor_state is not None
+    assert sensor_state.state == "18"
+    assert sensor_state.attributes.get("unit_of_measurement") == UnitOfTime.MINUTES
+    assert sensor_state.attributes.get("device_class") == "duration"
+
+    async_fire_mqtt_message(hass, "test_phoniebox/attribute/remaining_stopafter", "0")
+    await hass.async_block_till_done()
+    sensor_state = hass.states.get("sensor.phoniebox_test_box_remaining_stopafter")
+    assert sensor_state is not None
+    assert sensor_state.state == "0"

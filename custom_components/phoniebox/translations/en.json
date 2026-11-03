@@ -118,6 +118,9 @@
       },
       "edition": {
         "name": "Edition"
+      },
+      "remaining_stopafter": {
+        "name": "Sleep timer"
       }
     },
     "switch": {
