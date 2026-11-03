@@ -16,6 +16,7 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import STATE_UNAVAILABLE
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
+from homeassistant.util import dt as dt_util
 from homeassistant.util import slugify
 
 from .const import (
@@ -169,6 +170,7 @@ class PhonieboxMediaPlayer(PhonieboxEntity, MediaPlayerEntity, ABC):
                 x * parse_int_save(t)
                 for x, t in zip([3600, 60, 1], new_value.split(":"), strict=False)
             )
+            self._attr_media_position_updated_at = dt_util.utcnow()
         elif changed_attribute_name == PHONIEBOX_ATTR_ARTIST:
             self._attr_media_artist = new_value
         elif changed_attribute_name == PHONIEBOX_ATTR_TITLE:

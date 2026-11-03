@@ -10,6 +10,7 @@ from homeassistant.components.media_player.const import (
     ATTR_MEDIA_ARTIST,
     ATTR_MEDIA_DURATION,
     ATTR_MEDIA_POSITION,
+    ATTR_MEDIA_POSITION_UPDATED_AT,
     ATTR_MEDIA_REPEAT,
     ATTR_MEDIA_SEEK_POSITION,
     ATTR_MEDIA_SHUFFLE,
@@ -40,6 +41,7 @@ from homeassistant.const import (
 )
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_registry import RegistryEntry
+from homeassistant.util import dt as dt_util
 from pytest_homeassistant_custom_component.common import (
     MockConfigEntry,
     async_fire_mqtt_message,
@@ -843,3 +845,18 @@ async def test_bugfix_parse_value(
     phoniebox_state = hass.states.get("media_player.phoniebox_test_box")
     assert phoniebox_state is not None
     assert phoniebox_state.attributes.get(ATTR_MEDIA_VOLUME_LEVEL) == 0.0
+
+
+async def test_elapsed_sets_position_timestamp(
+    hass: HomeAssistant, mock_phoniebox: MockConfigEntry, config: dict
+) -> None:
+    """The position carries its time, so cards can move the progress bar on."""
+    before = dt_util.utcnow()
+    async_fire_mqtt_message(hass, "test_phoniebox/attribute/elapsed", "00:01:10")
+    await hass.async_block_till_done()
+    phoniebox_state = hass.states.get("media_player.phoniebox_test_box")
+    assert phoniebox_state is not None
+    assert phoniebox_state.attributes.get(ATTR_MEDIA_POSITION) == 70
+    updated_at = phoniebox_state.attributes.get(ATTR_MEDIA_POSITION_UPDATED_AT)
+    assert updated_at is not None
+    assert updated_at >= before
