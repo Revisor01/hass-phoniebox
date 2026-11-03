@@ -156,3 +156,15 @@ async def test_names_follow_the_language(
     await _setup(hass, language)
     for entity_id, name in names.items():
         assert _name(hass, entity_id) == name
+
+
+@pytest.mark.parametrize("language", LANGUAGES)
+def test_state_values_are_capitalised(language: str) -> None:
+    """The raw values of the box are shown capitalised in both languages."""
+    sensor = _load(language)["entity"]["sensor"]
+    assert sensor["state"]["state"] == {"online": "Online", "offline": "Offline"}
+    assert sensor["player_state"]["state"] == {
+        "play": "Play",
+        "pause": "Pause",
+        "stop": "Stop",
+    }
