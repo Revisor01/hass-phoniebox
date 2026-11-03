@@ -125,6 +125,7 @@ def _name(hass: HomeAssistant, entity_id: str) -> str:
                     "Phoniebox test_box Freier Speicher"
                 ),
                 "switch.phoniebox_test_box_rfid": "Phoniebox test_box RFID-Leser",
+                "button.phoniebox_test_box_shuffle": "Phoniebox test_box Shuffle",
                 "binary_sensor.phoniebox_test_box_rfid": (
                     "Phoniebox test_box RFID-Leser"
                 ),

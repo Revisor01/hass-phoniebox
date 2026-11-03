@@ -41,7 +41,7 @@
         "name": "Wiederholen"
       },
       "random": {
-        "name": "Zufallswiedergabe"
+        "name": "Shuffle"
       },
       "mute": {
         "name": "Stumm"
@@ -64,7 +64,7 @@
         "name": "Herunterfahren"
       },
       "shuffle": {
-        "name": "Mischen"
+        "name": "Shuffle"
       },
       "shutdown_silent": {
         "name": "Leise herunterfahren"
@@ -122,7 +122,7 @@
         "name": "Stumm"
       },
       "random": {
-        "name": "Zufallswiedergabe"
+        "name": "Shuffle"
       }
     }
   },
