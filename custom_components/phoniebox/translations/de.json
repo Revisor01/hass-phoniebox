@@ -81,10 +81,19 @@
         "name": "Speicher gesamt"
       },
       "state": {
-        "name": "Status"
+        "name": "Status",
+        "state": {
+          "online": "Online",
+          "offline": "Offline"
+        }
       },
       "player_state": {
-        "name": "Wiedergabestatus"
+        "name": "Wiedergabestatus",
+        "state": {
+          "play": "Play",
+          "pause": "Pause",
+          "stop": "Stop"
+        }
       },
       "source": {
         "name": "Quelle"
@@ -105,7 +114,7 @@
         "name": "Interpret"
       },
       "albumartist": {
-        "name": "Album-Interpret"
+        "name": "Album Artist"
       },
       "edition": {
         "name": "Edition"

@@ -81,10 +81,19 @@
         "name": "Disk total"
       },
       "state": {
-        "name": "State"
+        "name": "State",
+        "state": {
+          "online": "Online",
+          "offline": "Offline"
+        }
       },
       "player_state": {
-        "name": "Player state"
+        "name": "Player state",
+        "state": {
+          "play": "Play",
+          "pause": "Pause",
+          "stop": "Stop"
+        }
       },
       "source": {
         "name": "Source"
