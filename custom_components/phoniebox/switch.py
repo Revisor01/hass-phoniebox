@@ -28,6 +28,7 @@ from .utils import (
     create_mqtt_context,
     create_unique_id_suffix,
     handle_mqtt_entity_by_type,
+    translation_key,
 )
 
 if TYPE_CHECKING:
@@ -144,7 +145,8 @@ class PhonieboxBinarySwitch(PhonieboxEntity, SwitchEntity, ABC):
             data.name, config_entry.data[CONF_PHONIEBOX_NAME]
         )
         self.entity_id = _slug(data.name, config_entry.data[CONF_PHONIEBOX_NAME])
-        self._attr_name = data.name
+        self.key = data.name
+        self._attr_translation_key = translation_key(data.name)
         self._name = "switch_" + data.name
         self._mqtt_on_payload = data.mqtt_on_payload
         self._mqtt_off_payload = data.mqtt_off_payload
@@ -157,7 +159,7 @@ class PhonieboxBinarySwitch(PhonieboxEntity, SwitchEntity, ABC):
             return
         LOGGER.debug(
             "Updating switch %(name)s to -> %(value)s",
-            {"name": self.name, "value": value},
+            {"name": self.key, "value": value},
         )
         self._attr_is_on = value
 

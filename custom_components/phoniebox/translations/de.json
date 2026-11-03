@@ -6,10 +6,13 @@
         "data": {
           "phoniebox_name": "Name der Phoniebox",
           "mqtt_base_topic": "MQTT-Basis-Topic (aus der Phoniebox-Konfiguration)"
-        }
+        },
+        "title": "Phoniebox hinzufügen"
       }
     },
-    "error": {},
+    "error": {
+      "auth": "Bitte einen Namen und ein MQTT-Topic angeben"
+    },
     "abort": {}
   },
   "options": {
@@ -24,6 +27,235 @@
     },
     "error": {
       "invalid_url": "Bitte eine Adresse mit http:// oder https:// angeben"
+    }
+  },
+  "entity": {
+    "binary_sensor": {
+      "gpio": {
+        "name": "GPIO-Tasten"
+      },
+      "rfid": {
+        "name": "RFID-Leser"
+      },
+      "repeat": {
+        "name": "Wiederholen"
+      },
+      "random": {
+        "name": "Zufallswiedergabe"
+      },
+      "mute": {
+        "name": "Stumm"
+      }
+    },
+    "button": {
+      "scan": {
+        "name": "Musik einlesen"
+      },
+      "rewind": {
+        "name": "Playlist von vorn"
+      },
+      "replay": {
+        "name": "Titel von vorn"
+      },
+      "restart": {
+        "name": "Neu starten"
+      },
+      "shutdown": {
+        "name": "Herunterfahren"
+      },
+      "shuffle": {
+        "name": "Mischen"
+      },
+      "shutdown_silent": {
+        "name": "Leise herunterfahren"
+      }
+    },
+    "sensor": {
+      "temperature": {
+        "name": "Temperatur"
+      },
+      "disk_avail": {
+        "name": "Freier Speicher"
+      },
+      "disk_total": {
+        "name": "Speicher gesamt"
+      },
+      "state": {
+        "name": "Status"
+      },
+      "player_state": {
+        "name": "Wiedergabestatus"
+      },
+      "source": {
+        "name": "Quelle"
+      },
+      "throttling": {
+        "name": "Drosselung"
+      },
+      "version": {
+        "name": "Version"
+      },
+      "last_card": {
+        "name": "Letzte Karte"
+      },
+      "album": {
+        "name": "Album"
+      },
+      "artist": {
+        "name": "Interpret"
+      },
+      "albumartist": {
+        "name": "Album-Interpret"
+      },
+      "edition": {
+        "name": "Edition"
+      }
+    },
+    "switch": {
+      "gpio": {
+        "name": "GPIO-Tasten"
+      },
+      "rfid": {
+        "name": "RFID-Leser"
+      },
+      "mute": {
+        "name": "Stumm"
+      },
+      "random": {
+        "name": "Zufallswiedergabe"
+      }
+    }
+  },
+  "services": {
+    "set_volume_steps": {
+      "name": "Lautstärkeschritte festlegen",
+      "description": "Legt fest, um wie viel Prozent sich die Lautstärke je Schritt ändert.",
+      "fields": {
+        "volume_steps": {
+          "name": "Schritte",
+          "description": "Änderung der Lautstärke je Schritt."
+        }
+      }
+    },
+    "set_max_volume": {
+      "name": "Höchstlautstärke festlegen",
+      "description": "Legt die höchste Lautstärke der Phoniebox fest.",
+      "fields": {
+        "max_volume": {
+          "name": "Höchstlautstärke",
+          "description": "Höchste Lautstärke, die die Phoniebox zulässt."
+        }
+      }
+    },
+    "set_idle_shutdown_timer": {
+      "name": "Abschalten bei Leerlauf",
+      "description": "Schaltet die Phoniebox nach einer Zeit ohne Wiedergabe aus.",
+      "fields": {
+        "time": {
+          "name": "Leerlaufzeit",
+          "description": "Minuten ohne Wiedergabe bis zum Abschalten. 0 schaltet den Timer aus."
+        }
+      }
+    },
+    "set_shutdown_after": {
+      "name": "Abschalttimer stellen",
+      "description": "Schaltet die Phoniebox nach einer festen Zeit aus.",
+      "fields": {
+        "time": {
+          "name": "Zeit",
+          "description": "Minuten bis zum Abschalten. 0 schaltet den Timer aus."
+        }
+      }
+    },
+    "set_sleep_timer": {
+      "name": "Einschlaftimer stellen",
+      "description": "Pausiert die Wiedergabe nach einer festen Zeit.",
+      "fields": {
+        "time": {
+          "name": "Zeit",
+          "description": "Minuten bis zur Pause. 0 schaltet den Timer aus."
+        }
+      }
+    },
+    "set_rfid": {
+      "name": "RFID-Leser schalten",
+      "description": "Schaltet den RFID-Leser ein oder aus.",
+      "fields": {
+        "is_started": {
+          "name": "RFID-Leser aktiv",
+          "description": "Ein zum Einschalten, aus zum Ausschalten."
+        }
+      }
+    },
+    "set_gpio": {
+      "name": "GPIO-Tasten schalten",
+      "description": "Schaltet die GPIO-Tasten ein oder aus.",
+      "fields": {
+        "is_started": {
+          "name": "GPIO-Tasten aktiv",
+          "description": "Ein zum Einschalten, aus zum Ausschalten."
+        }
+      }
+    },
+    "swipe_card": {
+      "name": "Karte auflegen",
+      "description": "Löst die Aktion einer Karte aus, als läge sie auf dem Leser.",
+      "fields": {
+        "card_id": {
+          "name": "Karten-ID",
+          "description": "ID der Karte."
+        }
+      }
+    },
+    "play_folder": {
+      "name": "Ordner abspielen",
+      "description": "Spielt einen Ordner ab.",
+      "fields": {
+        "folder_name": {
+          "name": "Ordnername",
+          "description": "Name des Ordners."
+        }
+      }
+    },
+    "play_folder_recursive": {
+      "name": "Ordner mit Unterordnern abspielen",
+      "description": "Spielt einen Ordner samt Unterordnern ab.",
+      "fields": {
+        "folder_name": {
+          "name": "Ordnername",
+          "description": "Name des Ordners."
+        }
+      }
+    },
+    "player_seek": {
+      "name": "Spulen",
+      "description": "Spult um die angegebenen Sekunden vor oder zurück.",
+      "fields": {
+        "seek_position": {
+          "name": "Position",
+          "description": "Sekunden, negativ zum Zurückspulen."
+        }
+      }
+    },
+    "player_rewind": {
+      "name": "Playlist von vorn",
+      "description": "Startet die Playlist beim ersten Titel."
+    },
+    "player_replay": {
+      "name": "Titel von vorn",
+      "description": "Startet den aktuellen Titel von vorn."
+    },
+    "scan": {
+      "name": "Musik einlesen",
+      "description": "Liest den Musikordner neu ein."
+    },
+    "silent_turn_off": {
+      "name": "Leise ausschalten",
+      "description": "Schaltet die Phoniebox ohne Abschaltton aus."
+    },
+    "restart": {
+      "name": "Neu starten",
+      "description": "Startet die Phoniebox neu."
     }
   }
 }

@@ -94,6 +94,13 @@ interface already serves it, so nothing has to change on the box:
 Home Assistant fetches the image itself and passes it on, so the cover also shows in the
 app when you are away from home. Leave the field empty to switch the cover off again.
 
+### Languages
+
+Entity names, services and the setup dialogs are available in English and German and
+follow the language of Home Assistant. The device is named after the Phoniebox, for
+example "Phoniebox Kinderzimmer", so entities of several boxes can be told apart.
+Entity IDs stay the same as in earlier versions.
+
 ## Compatibility
 
 This integration is compatible with:

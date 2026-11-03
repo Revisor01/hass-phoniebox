@@ -35,6 +35,7 @@ from .utils import (
     create_mqtt_context,
     create_unique_id_suffix,
     handle_mqtt_entity_by_type,
+    translation_key,
 )
 
 
@@ -67,8 +68,8 @@ class GenericPhonieboxSensor(PhonieboxEntity, SensorEntity):  # pylint: disable=
             data.name, config_entry.data[CONF_PHONIEBOX_NAME]
         )
         self.entity_id = _slug(data.name, config_entry.data[CONF_PHONIEBOX_NAME])
-        self._attr_name = data.name
-        # This mqtt topic for the sensor which is its uid
+        self.key = data.name
+        self._attr_translation_key = translation_key(data.name)
         self._attr_native_unit_of_measurement = data.units
         self._attr_icon = data.icon
         self._attr_device_class = data.device_class
@@ -89,7 +90,7 @@ class GenericPhonieboxSensor(PhonieboxEntity, SensorEntity):  # pylint: disable=
 
         LOGGER.debug(
             "Updating sensor %(name)s to -> %(value)s",
-            {"name": self.name, "value": value},
+            {"name": self.key, "value": value},
         )
         self._attr_native_value = value
 
@@ -226,9 +227,6 @@ async def async_setup_entry(
         )
 
         for sensor in sensor_list:
-            if not isinstance(sensor.name, str):
-                continue
-
             context = create_mqtt_context(
                 entity=sensor,
                 store=store,

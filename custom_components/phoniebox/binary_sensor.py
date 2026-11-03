@@ -23,6 +23,7 @@ from .utils import (
     create_mqtt_context,
     create_unique_id_suffix,
     handle_mqtt_entity_by_type,
+    translation_key,
 )
 
 if TYPE_CHECKING:
@@ -82,9 +83,6 @@ async def async_setup_entry(
         )
 
         for sensor in sensor_list:
-            if not isinstance(sensor.name, str):
-                continue
-
             context = create_mqtt_context(
                 entity=sensor,
                 store=store,
@@ -160,7 +158,8 @@ class BinaryPhonieboxSensor(PhonieboxEntity, BinarySensorEntity):
             name, config_entry.data[CONF_PHONIEBOX_NAME]
         )
         self.entity_id = _slug(name, config_entry.data[CONF_PHONIEBOX_NAME])
-        self._attr_name = name
+        self.key = name
+        self._attr_translation_key = translation_key(name)
         self._attr_device_class = device_class
 
     def set_event(self, event: Any) -> None:  # pylint: disable=unused-argument  # noqa: ARG002
@@ -195,6 +194,6 @@ class BinaryPhonieboxSensor(PhonieboxEntity, BinarySensorEntity):
             return
         LOGGER.debug(
             "Updating binary sensor %(name)s to -> %(value)s",
-            {"name": self.name, "value": value},
+            {"name": self.key, "value": value},
         )
         self._attr_is_on = value

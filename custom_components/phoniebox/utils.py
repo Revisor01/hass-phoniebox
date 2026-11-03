@@ -31,6 +31,11 @@ class MqttContext:
     async_add_entities_callback: Any
 
 
+def translation_key(name: str) -> str:
+    """Return the translation key for an entity name such as "player state"."""
+    return slugify(name)
+
+
 def string_to_bool(value: str) -> bool:
     """Boolean string to boolean converter."""
     return value == "true"
@@ -185,24 +190,24 @@ def handle_mqtt_entity_discovery(config: MqttEntityConfig) -> None:
         config: Configuration object containing all required parameters
 
     """
-    if config.entity.name not in config.store:
+    if config.entity.key not in config.store:
         config.entity.hass = config.hass
         if config.is_event_based:
             config.entity.set_event(config.payload)
         else:
             config.entity.set_state(value=string_to_bool(str(config.payload)))
-        config.store[config.entity.name] = config.entity
+        config.store[config.entity.key] = config.entity
         if config.debug_logger:
             config.debug_logger.debug(
                 "Registering %(entity_type)s %(name)s",
-                {"entity_type": config.entity_type_name, "name": config.entity.name},
+                {"entity_type": config.entity_type_name, "name": config.entity.key},
             )
         config.async_add_entities_callback(
             new_entities=(config.entity,), update_before_add=True
         )
     else:
         ensure_entity_hass_and_update_state(
-            config.store[config.entity.name],
+            config.store[config.entity.key],
             config.hass,
             config.payload,
             is_event_based=config.is_event_based,

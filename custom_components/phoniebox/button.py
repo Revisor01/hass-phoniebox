@@ -11,6 +11,7 @@ from homeassistant.components.button import ButtonDeviceClass, ButtonEntity
 from .const import (
     ALL_BUTTONS,
     BUTTON_RESTART,
+    BUTTON_TRANSLATION_KEYS,
     CONF_PHONIEBOX_NAME,
     DOMAIN,
     LOGGER,
@@ -73,12 +74,12 @@ async def async_setup_entry(
         return
 
     for button in buttons:
-        if button.name not in store:
+        if button.key not in store:
             button.hass = hass
-            store[button.name] = button
+            store[button.key] = button
             LOGGER.debug(
                 "Registering buttons %(name)s",
-                {"name": button.name},
+                {"name": button.key},
             )
             async_add_devices(new_entities=(button,), update_before_add=True)
 
@@ -102,7 +103,8 @@ class PhonieboxButton(PhonieboxEntity, ButtonEntity, ABC):
             "sensor", data.name, phoniebox_name
         )
         self.entity_id = create_entity_slug("button", data.name, phoniebox_name)
-        self._attr_name = data.name
+        self.key = data.name
+        self._attr_translation_key = BUTTON_TRANSLATION_KEYS[data.name]
         self._attr_device_class = data.device_class
         self._on_press_mqtt_topic = data.on_press_mqtt_topic
 

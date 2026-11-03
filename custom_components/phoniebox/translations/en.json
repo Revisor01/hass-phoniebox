@@ -6,10 +6,13 @@
         "data": {
           "phoniebox_name": "Phoniebox Device Name",
           "mqtt_base_topic": "Base MQTT Topic (configured in Phoniebox Config)"
-        }
+        },
+        "title": "Add Phoniebox"
       }
     },
-    "error": {},
+    "error": {
+      "auth": "Please enter a name and an MQTT topic"
+    },
     "abort": {}
   },
   "options": {
@@ -24,6 +27,235 @@
     },
     "error": {
       "invalid_url": "Please enter an address starting with http:// or https://"
+    }
+  },
+  "entity": {
+    "binary_sensor": {
+      "gpio": {
+        "name": "GPIO buttons"
+      },
+      "rfid": {
+        "name": "RFID reader"
+      },
+      "repeat": {
+        "name": "Repeat"
+      },
+      "random": {
+        "name": "Shuffle"
+      },
+      "mute": {
+        "name": "Mute"
+      }
+    },
+    "button": {
+      "scan": {
+        "name": "Start scan"
+      },
+      "rewind": {
+        "name": "Rewind"
+      },
+      "replay": {
+        "name": "Replay"
+      },
+      "restart": {
+        "name": "Restart"
+      },
+      "shutdown": {
+        "name": "Shut down"
+      },
+      "shuffle": {
+        "name": "Shuffle"
+      },
+      "shutdown_silent": {
+        "name": "Shut down silently"
+      }
+    },
+    "sensor": {
+      "temperature": {
+        "name": "Temperature"
+      },
+      "disk_avail": {
+        "name": "Disk available"
+      },
+      "disk_total": {
+        "name": "Disk total"
+      },
+      "state": {
+        "name": "State"
+      },
+      "player_state": {
+        "name": "Player state"
+      },
+      "source": {
+        "name": "Source"
+      },
+      "throttling": {
+        "name": "Throttling"
+      },
+      "version": {
+        "name": "Version"
+      },
+      "last_card": {
+        "name": "Last card"
+      },
+      "album": {
+        "name": "Album"
+      },
+      "artist": {
+        "name": "Artist"
+      },
+      "albumartist": {
+        "name": "Album artist"
+      },
+      "edition": {
+        "name": "Edition"
+      }
+    },
+    "switch": {
+      "gpio": {
+        "name": "GPIO buttons"
+      },
+      "rfid": {
+        "name": "RFID reader"
+      },
+      "mute": {
+        "name": "Mute"
+      },
+      "random": {
+        "name": "Shuffle"
+      }
+    }
+  },
+  "services": {
+    "set_volume_steps": {
+      "name": "Set volume steps",
+      "description": "Set how much the volume changes per step, in percent.",
+      "fields": {
+        "volume_steps": {
+          "name": "Steps",
+          "description": "Volume change per step."
+        }
+      }
+    },
+    "set_max_volume": {
+      "name": "Set maximum volume",
+      "description": "Set the maximum volume of the Phoniebox.",
+      "fields": {
+        "max_volume": {
+          "name": "Maximum volume",
+          "description": "Highest volume the Phoniebox allows."
+        }
+      }
+    },
+    "set_idle_shutdown_timer": {
+      "name": "Set idle shutdown timer",
+      "description": "Shut the Phoniebox down after it has been idle for a while.",
+      "fields": {
+        "time": {
+          "name": "Idle time",
+          "description": "Minutes of idling before shutdown. 0 turns the timer off."
+        }
+      }
+    },
+    "set_shutdown_after": {
+      "name": "Set shutdown timer",
+      "description": "Shut the Phoniebox down after a set time.",
+      "fields": {
+        "time": {
+          "name": "Time",
+          "description": "Minutes until shutdown. 0 turns the timer off."
+        }
+      }
+    },
+    "set_sleep_timer": {
+      "name": "Set sleep timer",
+      "description": "Pause the playback after a set time.",
+      "fields": {
+        "time": {
+          "name": "Time",
+          "description": "Minutes until playback pauses. 0 turns the timer off."
+        }
+      }
+    },
+    "set_rfid": {
+      "name": "Toggle RFID reader",
+      "description": "Turn the RFID reader on or off.",
+      "fields": {
+        "is_started": {
+          "name": "RFID reader active",
+          "description": "On to activate, off to deactivate."
+        }
+      }
+    },
+    "set_gpio": {
+      "name": "Toggle GPIO buttons",
+      "description": "Turn the GPIO buttons on or off.",
+      "fields": {
+        "is_started": {
+          "name": "GPIO buttons active",
+          "description": "On to activate, off to deactivate."
+        }
+      }
+    },
+    "swipe_card": {
+      "name": "Swipe a card",
+      "description": "Trigger the action of a card as if it was placed on the reader.",
+      "fields": {
+        "card_id": {
+          "name": "Card ID",
+          "description": "ID of the card to swipe."
+        }
+      }
+    },
+    "play_folder": {
+      "name": "Play a folder",
+      "description": "Play a folder.",
+      "fields": {
+        "folder_name": {
+          "name": "Folder name",
+          "description": "Name of the folder."
+        }
+      }
+    },
+    "play_folder_recursive": {
+      "name": "Play a folder (recursive)",
+      "description": "Play a folder including its subfolders.",
+      "fields": {
+        "folder_name": {
+          "name": "Folder name",
+          "description": "Name of the folder."
+        }
+      }
+    },
+    "player_seek": {
+      "name": "Seek",
+      "description": "Seek forward or backward by the given seconds.",
+      "fields": {
+        "seek_position": {
+          "name": "Position",
+          "description": "Seconds to seek, negative to go back."
+        }
+      }
+    },
+    "player_rewind": {
+      "name": "Rewind",
+      "description": "Start the playlist from the first track."
+    },
+    "player_replay": {
+      "name": "Replay",
+      "description": "Start the current track from the beginning."
+    },
+    "scan": {
+      "name": "Scan",
+      "description": "Scan the music folder for new files."
+    },
+    "silent_turn_off": {
+      "name": "Turn off (silent)",
+      "description": "Turn the Phoniebox off without the shutdown sound."
+    },
+    "restart": {
+      "name": "Restart",
+      "description": "Restart the Phoniebox."
     }
   }
 }

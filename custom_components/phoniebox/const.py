@@ -23,7 +23,7 @@ LOGGER: Logger = getLogger(__package__)
 NAME: Final[str] = "Phoniebox"
 DOMAIN: Final[str] = "phoniebox"
 DOMAIN_DATA: Final[str] = f"{DOMAIN}_data"
-VERSION: Final[str] = "0.10.0"  # Should match manifest.json
+VERSION: Final[str] = "0.11.0"  # Should match manifest.json
 ATTRIBUTION: Final[str] = ""
 ISSUE_URL: Final[str] = "https://github.com/c0un7-z3r0/hass-phoniebox/issues"
 
@@ -331,6 +331,17 @@ ALL_BUTTONS: Final[list[str]] = [
     BUTTON_SHUFFLE,
     BUTTON_SHUTDOWN_SILENT,
 ]
+
+# English names stay the keys of unique and entity IDs, translations name them.
+BUTTON_TRANSLATION_KEYS: Final[dict[str, str]] = {
+    BUTTON_SCAN: "scan",
+    BUTTON_REWIND: "rewind",
+    BUTTON_REPLAY: "replay",
+    BUTTON_RESTART: "restart",
+    BUTTON_SHUTDOWN: "shutdown",
+    BUTTON_SHUFFLE: "shuffle",
+    BUTTON_SHUTDOWN_SILENT: "shutdown_silent",
+}
 
 # ===== MQTT TOPIC CONFIGURATION =====
 # Topic length constants for parsing
