@@ -2,6 +2,7 @@
 
 from abc import ABC
 from typing import override
+from urllib.parse import urlencode
 
 from homeassistant.components.media_player import MediaPlayerEntity
 from homeassistant.components.media_player.const import (
@@ -18,6 +19,7 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.util import slugify
 
 from .const import (
+    CONF_COVER_URL,
     CONF_PHONIEBOX_NAME,
     DOMAIN,
     HA_REPEAT_TO_PHONIEBOX,
@@ -91,6 +93,15 @@ def _slug(phoniebox_name: str) -> str:
     return f"media_player.phoniebox_{slugify(phoniebox_name)}"
 
 
+def cover_image_url(cover_url: str | None, album: str | None) -> str | None:
+    """Return the cover address for an album, or None if either is missing."""
+    if not cover_url or not album:
+        return None
+    # The album makes the address unique, so HA's image cache holds one cover per album.
+    separator = "&" if "?" in cover_url else "?"
+    return f"{cover_url}{separator}{urlencode({'album': album})}"
+
+
 class PhonieboxMediaPlayer(PhonieboxEntity, MediaPlayerEntity, ABC):
     """The Phoniebox media player."""
 
@@ -120,6 +131,15 @@ class PhonieboxMediaPlayer(PhonieboxEntity, MediaPlayerEntity, ABC):
         self._attr_media_title = None
         self._attr_media_track = None
         self._vol_steps = 5
+
+    @property
+    @override
+    def media_image_url(self) -> str | None:
+        """Return the cover the Phoniebox web interface serves for the album."""
+        return cover_image_url(
+            self.config_entry.options.get(CONF_COVER_URL),
+            self._attr_media_album_name,
+        )
 
     async def async_set_attributes(self, msg: ReceiveMessage) -> None:  # noqa: PLR0912
         """Set volume level."""

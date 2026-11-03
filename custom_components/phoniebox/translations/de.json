@@ -1,0 +1,29 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "description": "Hilfe zur Einrichtung gibt es hier: {docs_url}",
+        "data": {
+          "phoniebox_name": "Name der Phoniebox",
+          "mqtt_base_topic": "MQTT-Basis-Topic (aus der Phoniebox-Konfiguration)"
+        }
+      }
+    },
+    "error": {},
+    "abort": {}
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Phoniebox-Optionen",
+        "description": "Adresse des Covers in der Weboberfläche der Phoniebox, zum Beispiel http://192.168.0.10/api/cover.php. Leer lassen, wenn kein Cover angezeigt werden soll.",
+        "data": {
+          "cover_url": "Adresse des Covers"
+        }
+      }
+    },
+    "error": {
+      "invalid_url": "Bitte eine Adresse mit http:// oder https:// angeben"
+    }
+  }
+}
