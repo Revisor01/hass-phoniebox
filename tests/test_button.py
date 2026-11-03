@@ -10,7 +10,7 @@ from homeassistant.helpers import entity_registry as er
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
 from custom_components.phoniebox.button import find_mqtt_topic
-from custom_components.phoniebox.const import ALL_BUTTONS
+from custom_components.phoniebox.const import ALL_BUTTONS, BUTTON_TRANSLATION_KEYS
 
 if TYPE_CHECKING:
     from homeassistant.helpers.entity_registry import RegistryEntry
@@ -47,8 +47,12 @@ async def test_button_press(
     data = {ATTR_ENTITY_ID: test_button.entity_id}
     await hass.services.async_call("button", SERVICE_PRESS, data, blocking=True)
 
-    assert test_button.original_name is not None
-    button_mqtt_topic = find_mqtt_topic(test_button.original_name)
+    button_name = next(
+        name
+        for name, key in BUTTON_TRANSLATION_KEYS.items()
+        if key == test_button.translation_key
+    )
+    button_mqtt_topic = find_mqtt_topic(button_name)
     assert button_mqtt_topic is not None
     await hass.async_block_till_done()
 

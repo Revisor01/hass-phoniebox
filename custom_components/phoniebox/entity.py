@@ -7,7 +7,7 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.entity import Entity
 
-from .const import ATTRIBUTION, DOMAIN, NAME, VERSION
+from .const import ATTRIBUTION, CONF_PHONIEBOX_NAME, DOMAIN, NAME, VERSION
 from .data_coordinator import DataCoordinator
 
 
@@ -15,7 +15,9 @@ class PhonieboxEntity(Entity):
     """The phoniebox HA entity."""
 
     coordinator: DataCoordinator
+    _attr_has_entity_name = True
     _unique_id_suffix: str | None = None
+    key: str = ""
 
     def __init__(self, config_entry: ConfigEntry, coordinator: DataCoordinator) -> None:
         """Init the entity."""
@@ -34,7 +36,7 @@ class PhonieboxEntity(Entity):
         """Returns the device info."""
         return DeviceInfo(
             identifiers={(DOMAIN, self.config_entry.entry_id)},
-            name=NAME,
+            name=f"{NAME} {self.config_entry.data[CONF_PHONIEBOX_NAME]}",
             model=VERSION,
             manufacturer=NAME,
             sw_version=self.coordinator.version,

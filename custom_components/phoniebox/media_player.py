@@ -114,7 +114,7 @@ class PhonieboxMediaPlayer(PhonieboxEntity, MediaPlayerEntity, ABC):
         """Initialise the phoniebox."""
         super().__init__(config_entry, coordinator)
 
-        self._attr_name = "Phoniebox" + " " + config_entry.data[CONF_PHONIEBOX_NAME]
+        self._attr_name = None
         self.entity_id = _slug(config_entry.data[CONF_PHONIEBOX_NAME])
         self._unique_id_suffix = self.entity_id
         self._attr_state = None  # initially None to allow all attr to be initialised
