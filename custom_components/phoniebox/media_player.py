@@ -31,6 +31,7 @@ from .const import (
     PHONIEBOX_ATTR_ARTIST,
     PHONIEBOX_ATTR_DURATION,
     PHONIEBOX_ATTR_ELAPSED,
+    PHONIEBOX_ATTR_LAST_CARD,
     PHONIEBOX_ATTR_MAX_VOLUME,
     PHONIEBOX_ATTR_MUTE,
     PHONIEBOX_ATTR_RANDOM,
@@ -94,13 +95,21 @@ def _slug(phoniebox_name: str) -> str:
     return f"media_player.phoniebox_{slugify(phoniebox_name)}"
 
 
-def cover_image_url(cover_url: str | None, album: str | None) -> str | None:
-    """Return the cover address for an album, or None if either is missing."""
-    if not cover_url or not album:
+def cover_image_url(
+    cover_url: str | None, album: str | None, last_card: str | None = None
+) -> str | None:
+    """Return the cover address for the album or else the last card, if known."""
+    if not cover_url:
         return None
-    # The album makes the address unique, so HA's image cache holds one cover per album.
+    # Album or card makes the address unique, so HA's image cache holds one cover each.
+    if album:
+        key = {"album": album}
+    elif last_card:
+        key = {"card": last_card}
+    else:
+        return None
     separator = "&" if "?" in cover_url else "?"
-    return f"{cover_url}{separator}{urlencode({'album': album})}"
+    return f"{cover_url}{separator}{urlencode(key)}"
 
 
 class PhonieboxMediaPlayer(PhonieboxEntity, MediaPlayerEntity, ABC):
@@ -132,14 +141,18 @@ class PhonieboxMediaPlayer(PhonieboxEntity, MediaPlayerEntity, ABC):
         self._attr_media_title = None
         self._attr_media_track = None
         self._vol_steps = 5
+        self._last_card: str | None = None
 
     @property
     @override
     def media_image_url(self) -> str | None:
         """Return the cover the Phoniebox web interface serves for the album."""
+        if self._attr_state == MediaPlayerState.OFF:
+            return None
         return cover_image_url(
             self.config_entry.options.get(CONF_COVER_URL),
             self._attr_media_album_name,
+            self._last_card,
         )
 
     async def async_set_attributes(self, msg: ReceiveMessage) -> None:  # noqa: PLR0912
@@ -179,6 +192,8 @@ class PhonieboxMediaPlayer(PhonieboxEntity, MediaPlayerEntity, ABC):
             self._attr_media_album_name = new_value
         elif changed_attribute_name == PHONIEBOX_ATTR_ALBUM_ARTIST:
             self._attr_media_album_artist = new_value
+        elif changed_attribute_name == PHONIEBOX_ATTR_LAST_CARD:
+            self._last_card = new_value.strip()
         elif changed_attribute_name == PHONIEBOX_ATTR_VOLUME_STEPS:
             self._vol_steps = parse_int_save(new_value)
         elif changed_attribute_name == PHONIEBOX_ATTR_REPEAT:

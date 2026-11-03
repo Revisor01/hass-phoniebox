@@ -93,6 +93,14 @@ interface already serves it, so nothing has to change on the box:
 
 Home Assistant fetches the image itself and passes it on, so the cover also shows in the
 app when you are away from home. Leave the field empty to switch the cover off again.
+While the box is stopped, the cover of the last card stays visible and changes when a
+new card is placed.
+
+### Sleep timer
+
+The sensor "Sleep timer" shows the minutes until the box pauses. Start the timer with the
+action `phoniebox.set_sleep_timer`, for example from a button on the dashboard, and set it
+to 0 to cancel it.
 
 ### Languages
 

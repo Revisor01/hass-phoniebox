@@ -119,3 +119,49 @@ async def test_options_flow_clears_cover_url(hass: HomeAssistant) -> None:
     )
     assert result["type"] == FlowResultType.CREATE_ENTRY
     assert entry.options == {}
+
+
+def test_cover_image_url_falls_back_to_last_card() -> None:
+    """Without an album the last card keys the cover, so it shows while stopped."""
+    assert cover_image_url(COVER, None, "0001164378") == f"{COVER}?card=0001164378"
+    assert cover_image_url(COVER, "", "0001164378") == f"{COVER}?card=0001164378"
+    assert (
+        cover_image_url(COVER, "Holger in Love", "0001164378")
+        == f"{COVER}?album=Holger+in+Love"
+    )
+    assert cover_image_url(COVER, None, "") is None
+    assert cover_image_url(None, None, "0001164378") is None
+
+
+async def _card(hass: HomeAssistant, card: str) -> None:
+    async_fire_mqtt_message(hass, "test_phoniebox/attribute/last_card", card)
+    await hass.async_block_till_done()
+
+
+async def test_picture_while_stopped_follows_last_card(hass: HomeAssistant) -> None:
+    """A stopped box still shows the cover of the last card, a new card changes it."""
+    await _setup(hass, {CONF_COVER_URL: COVER})
+    async_fire_mqtt_message(hass, "test_phoniebox/state", "online")
+    await _card(hass, "0001164378")
+
+    state = hass.states.get(ENTITY_ID)
+    assert state is not None
+    assert state.state == "idle"
+    first = state.attributes[ATTR_ENTITY_PICTURE]
+    assert first.startswith(f"/api/media_player_proxy/{ENTITY_ID}?token=")
+
+    await _card(hass, "0009367846")
+    assert hass.states.get(ENTITY_ID).attributes[ATTR_ENTITY_PICTURE] != first
+
+
+async def test_no_picture_while_offline(hass: HomeAssistant) -> None:
+    """An offline box cannot serve its cover, so no picture is shown."""
+    await _setup(hass, {CONF_COVER_URL: COVER})
+    await _card(hass, "0001164378")
+    async_fire_mqtt_message(hass, "test_phoniebox/state", "offline")
+    await hass.async_block_till_done()
+
+    state = hass.states.get(ENTITY_ID)
+    assert state is not None
+    assert state.state == "off"
+    assert ATTR_ENTITY_PICTURE not in state.attributes

@@ -8,7 +8,12 @@ from typing import Any
 from homeassistant.components.mqtt.models import ReceiveMessage
 from homeassistant.components.sensor import SensorDeviceClass, SensorEntity
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import EntityCategory, UnitOfInformation, UnitOfTemperature
+from homeassistant.const import (
+    EntityCategory,
+    UnitOfInformation,
+    UnitOfTemperature,
+    UnitOfTime,
+)
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
@@ -20,6 +25,7 @@ from .const import (
     GIGABYTE_SENSORS,
     IGNORE_SENSORS,
     LOGGER,
+    PHONIEBOX_ATTR_REMAINING_STOP_AFTER,
     STRING_SENSORS,
     TOPIC_DOMAIN_FILE,
     TOPIC_DOMAIN_STATE,
@@ -35,6 +41,7 @@ from .utils import (
     create_mqtt_context,
     create_unique_id_suffix,
     handle_mqtt_entity_by_type,
+    parse_int_save,
     translation_key,
 )
 
@@ -44,7 +51,7 @@ class SensorData:
     """Button Data."""
 
     name: str
-    units: UnitOfInformation | UnitOfTemperature | None
+    units: UnitOfInformation | UnitOfTemperature | UnitOfTime | None
     entity_category: EntityCategory | None = None
     icon: str | None = None
     device_class: SensorDeviceClass | None = None
@@ -140,6 +147,19 @@ def discover_sensors(  # noqa: PLR0911 # pylint: disable=too-many-return-stateme
                 units=UnitOfTemperature.CELSIUS,
                 device_class=SensorDeviceClass.TEMPERATURE,
                 extract_value=temp_string_to_float,
+            ),
+        )
+
+    if domain == PHONIEBOX_ATTR_REMAINING_STOP_AFTER:
+        return GenericPhonieboxSensor(
+            config_entry=entry,
+            coordinator=coordinator,
+            data=SensorData(
+                name=domain,
+                units=UnitOfTime.MINUTES,
+                device_class=SensorDeviceClass.DURATION,
+                icon="mdi:sleep",
+                extract_value=parse_int_save,
             ),
         )
 

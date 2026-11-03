@@ -64,6 +64,7 @@ def test_every_entity_has_a_name(language: str) -> None:
                 "state",
                 "player state",
                 "source",
+                "remaining_stopafter",
             ]
         },
     }
