@@ -14,9 +14,16 @@
   },
   "options": {
     "step": {
-      "user": {
-        "data": {}
+      "init": {
+        "title": "Phoniebox options",
+        "description": "Address of the cover image in the Phoniebox web interface, for example http://192.168.0.10/api/cover.php. Leave empty to show no cover.",
+        "data": {
+          "cover_url": "Cover image address"
+        }
       }
+    },
+    "error": {
+      "invalid_url": "Please enter an address starting with http:// or https://"
     }
   }
 }

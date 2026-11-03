@@ -83,6 +83,17 @@ and the base MQTT Topic. This helps if you have multiple phonieboxes that you wa
 
 ![ha phoniebox integration](https://github.com/c0un7-z3r0/hass-phoniebox/blob/main/assets/device.png)
 
+### Cover image
+
+The media player can show the cover of the folder that is playing. The Phoniebox web
+interface already serves it, so nothing has to change on the box:
+
+1. Open **Settings** → **Devices & Services** → **Phoniebox** → **Configure**
+2. Enter the cover address of the box, for example `http://192.168.0.10/api/cover.php`
+
+Home Assistant fetches the image itself and passes it on, so the cover also shows in the
+app when you are away from home. Leave the field empty to switch the cover off again.
+
 ## Compatibility
 
 This integration is compatible with:
